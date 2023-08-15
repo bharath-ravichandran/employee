@@ -1,5 +1,5 @@
-import 'package:employee/employee_details/employee_list.dart';
 import 'package:employee/models/employee_hive_model.dart';
+import 'package:employee/ui/employee_details/employee_list.dart';
 import 'package:employee/utils/app_routes.dart';
 import 'package:employee/utils/app_theme.dart';
 import 'package:employee/utils/screen_utils.dart';

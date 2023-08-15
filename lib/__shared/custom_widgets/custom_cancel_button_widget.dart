@@ -1,22 +1,29 @@
 import 'package:flutter/material.dart';
 
-class CancelButton extends StatelessWidget {
+class AppButton extends StatelessWidget {
+  final Color? color;
+  final String label;
   final void Function()? onPressed;
 
-  const CancelButton({super.key, this.onPressed});
+  const AppButton({
+    super.key,
+    required this.onPressed,
+    required this.label,
+    this.color,
+  });
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.lightBlue.shade50,
+        backgroundColor: color ?? Colors.lightBlue.shade50,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(6), // <-- Radius
         ),
       ),
       child: Text(
-        'Cancel',
+        label,
         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
               color: Colors.lightBlue,
             ),

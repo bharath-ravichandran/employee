@@ -1,8 +1,8 @@
-import 'package:employee/employee_details/add_employee.dart';
-import 'package:employee/employee_details/edit_employee.dart';
-import 'package:employee/employee_details/employee_list.dart';
-import 'package:employee/employee_details/error_page.dart';
-import 'package:employee/employee_details/sample.dart';
+import 'package:employee/ui/employee_details/add_employee.dart';
+import 'package:employee/ui/employee_details/edit_employee.dart';
+import 'package:employee/ui/employee_details/employee_list.dart';
+import 'package:employee/ui/employee_details/error_page.dart';
+import 'package:employee/ui/employee_details/sample.dart';
 import 'package:flutter/material.dart';
 
 final GlobalKey<NavigatorState> rootNavKey = GlobalKey<NavigatorState>();

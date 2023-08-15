@@ -9,7 +9,7 @@ class CustomDropDownWidget extends StatefulWidget {
 }
 
 class _CustomDropDownWidgetState extends State<CustomDropDownWidget> {
-  String _selected = '';
+  String? _selected;
   final List<String> _items = ['Product Designer', 'Flutter Developer', 'QA Tester', 'Product Owner'];
 
   @override
@@ -34,7 +34,7 @@ class _CustomDropDownWidgetState extends State<CustomDropDownWidget> {
                 SvgPicture.asset(AppIcons.work),
                 const SizedBox(width: 10),
                 Text(
-                  'Select Role',
+                  _selected ?? 'Select Role',
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: AppColors.employeeGrey),
                 ),
                 const Expanded(child: SizedBox.shrink()),
@@ -44,7 +44,6 @@ class _CustomDropDownWidgetState extends State<CustomDropDownWidget> {
             ),
           ),
         ),
-        Text('Selected item: $_selected')
       ],
     );
   }

@@ -69,8 +69,9 @@ class _AddEmployeeState extends State<AddEmployee> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  CancelButton(
+                  AppButton(
                     onPressed: () => Navigator.of(context).pop(),
+                    label: 'Cancel',
                   ),
                   const SizedBox(width: 20),
                   CustomSaveButton(

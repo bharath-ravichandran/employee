@@ -105,16 +105,11 @@ class AppTheme {
       );
 
   static TextTheme textTheme() => TextTheme(
-        headline6: _headline6,
-        headline5: _headline5,
-        headline4: _headline4,
-        headline3: _headline3,
-        headline2: _headline2,
-        headline1: _headline1,
-        bodyText1: _bodyText1,
-        bodyText2: _bodyText2,
-        button: _button,
-        caption: _caption,
+        displaySmall: _textTheme.displaySmall?.copyWith(color: Colors.white),
+        headlineSmall: _textTheme.headlineSmall?.copyWith(color: Colors.white),
+        titleSmall: _textTheme.titleSmall?.copyWith(color: Colors.white),
+        bodySmall: _textTheme.bodySmall?.copyWith(color: Colors.black),
+        labelSmall: _textTheme.labelSmall?.copyWith(color: Colors.grey),
       );
 
   static InputDecorationTheme inputDecorationTheme() => InputDecorationTheme(
@@ -123,4 +118,16 @@ class AppTheme {
           horizontal: 2.w,
         ),
       );
+}
+
+class AppExTheme {
+  static TextStyle headlineSmall(context) => Theme.of(context).textTheme.headlineSmall!;
+
+  static TextStyle displaySmall(context) => Theme.of(context).textTheme.displaySmall!;
+
+  static TextStyle bodySmall(context) => Theme.of(context).textTheme.bodySmall!;
+
+  static TextStyle titleSmall(context) => Theme.of(context).textTheme.titleSmall!;
+
+  static TextStyle labelSmall(context) => Theme.of(context).textTheme.labelSmall!;
 }

@@ -1,11 +1,12 @@
 import 'package:employee/__shared/custom_widgets/custom_slide_menu_widget.dart';
 import 'package:employee/bloc/cubit/employee_cubit.dart';
-import 'package:employee/employee_details/error_page.dart';
 import 'package:employee/utils/app_colors.dart';
 import 'package:employee/utils/app_routes.dart';
 import 'package:employee/utils/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'error_page.dart';
 
 class EmployeeList extends StatelessWidget {
   const EmployeeList({super.key});
@@ -153,8 +154,8 @@ class EmployeeList extends StatelessWidget {
           ),
         ),
         onPressed: () {
-          Nav.popAndPush(context, route: AppRoutes.addEmployee);
-          // Nav.popAndPush(context, route: AppRoutes.sample);
+          //Nav.popAndPush(context, route: AppRoutes.addEmployee);
+          Nav.popAndPush(context, route: AppRoutes.sample);
         },
         child: const Icon(
           Icons.add,
