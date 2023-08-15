@@ -7,12 +7,18 @@ abstract class EmployeeState extends Equatable {
   List<Object> get props => [];
 }
 
+class EmployeeInitial extends EmployeeState {
+  String? route;
+
+  EmployeeInitial({this.route});
+}
+
 class EmployeeLoading extends EmployeeState {}
 
 class EmployeeSuccess extends EmployeeState {
-  final String message;
+  final List<Employee> empl;
 
-  const EmployeeSuccess({required this.message});
+  const EmployeeSuccess({required this.empl});
 }
 
 class EmployeeError extends EmployeeState {

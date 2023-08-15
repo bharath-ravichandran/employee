@@ -6,6 +6,8 @@ import 'package:employee/__shared/custom_widgets/custom_input_texfield_widget.da
 import 'package:employee/__shared/custom_widgets/custom_save_button_widget.dart';
 import 'package:employee/models/employee_hive_model.dart';
 import 'package:employee/utils/app_assets.dart';
+import 'package:employee/utils/app_routes.dart';
+import 'package:employee/utils/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hive/hive.dart';
@@ -80,7 +82,7 @@ class _AddEmployeeState extends State<AddEmployee> {
                           '01-01-2000',
                           '01-01-2001',
                         );
-                        Navigator.of(context).pop();
+                        Nav.popAndPush(context, route: AppRoutes.employeeList);
                       }
                     },
                   ),
@@ -93,10 +95,11 @@ class _AddEmployeeState extends State<AddEmployee> {
     );
   }
 
-  addEmployee(String name, String designation, String from, String to) {
+  addEmployee(String name, String designation, String from, String to) async {
     Random random = Random();
     int randomNumber = random.nextInt(100);
     Employee newEmployee = Employee(
+      randomNumber.toString(),
       employeeId: randomNumber.toString(),
       employeeName: name,
       employeeDesignation: designation,
@@ -104,7 +107,8 @@ class _AddEmployeeState extends State<AddEmployee> {
       to: to,
     );
 
-    box.add(newEmployee);
-    print('Info added to box!  ${newEmployee.employeeId}');
+    int a = await box.add(newEmployee);
+    print('a : $a');
+    print('Info added to box!  ${newEmployee.key}');
   }
 }

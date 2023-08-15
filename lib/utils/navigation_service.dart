@@ -8,6 +8,14 @@ class Nav {
     Navigator.of(context).pushNamed(route, arguments: arguments);
   }
 
+  Nav.popAndPush(this.context, {required String route, Object? arguments}) {
+    Navigator.of(context).popAndPushNamed(route, arguments: arguments);
+  }
+
+  Nav.replace(this.context, {required String route, Object? arguments}) {
+    Navigator.of(context).pushReplacementNamed(route, arguments: arguments);
+  }
+
   Nav.dialog(
     this.context, {
     required String route,

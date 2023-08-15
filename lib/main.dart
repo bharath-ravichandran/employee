@@ -30,7 +30,6 @@ class MyApp extends StatelessWidget {
           navigatorKey: rootNavKey,
           theme: AppTheme.init(),
           home: const EmployeeList(),
-          // home: const SlidebleList(),
           initialRoute: AppRoutes.onboarding,
           onGenerateRoute: generateRoute,
         );

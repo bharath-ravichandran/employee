@@ -19,7 +19,11 @@ class Employee {
   @HiveField(4)
   final String to;
 
-  Employee({
+  @HiveField(5)
+  final String key;
+
+  Employee(
+    this.key, {
     required this.employeeId,
     required this.employeeName,
     required this.employeeDesignation,

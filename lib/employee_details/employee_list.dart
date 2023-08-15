@@ -1,8 +1,8 @@
 import 'package:employee/__shared/custom_widgets/custom_slide_menu_widget.dart';
 import 'package:employee/bloc/cubit/employee_cubit.dart';
-import 'package:employee/employee_details/add_employee.dart';
 import 'package:employee/employee_details/error_page.dart';
 import 'package:employee/utils/app_colors.dart';
+import 'package:employee/utils/app_routes.dart';
 import 'package:employee/utils/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,18 +27,20 @@ class EmployeeList extends StatelessWidget {
           //   child: Image.asset(AppIcons.notFound),
           // ),
           BlocProvider.value(
-        value: EmployeeCubit()..getAllEmployees(),
+        value: EmployeeCubit(),
         child: BlocConsumer<EmployeeCubit, EmployeeState>(
-          bloc: EmployeeCubit(),
+          bloc: EmployeeCubit()..getAllEmployees(),
           listener: (_, state) {
             print('object state : $state');
-            if (state is EmployeeLoading) {
+            if (state is EmployeeInitial) {
+              const Center(child: CircularProgressIndicator());
+            } else if (state is EmployeeLoading) {
               const Center(child: CircularProgressIndicator());
             } else if (state is EmployeeSuccess) {
               ListView(
                 children: ListTile.divideTiles(
                   context: context,
-                  tiles: List.generate(42, (index) {
+                  tiles: List.generate(state.empl.length, (index) {
                     return CustomSlideMenu(
                       menuItems: <Widget>[
                         Container(
@@ -50,22 +52,30 @@ class EmployeeList extends StatelessWidget {
                               Icons.delete_forever_outlined,
                               size: 36,
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              print(state.empl[index].employeeId);
+                              EmployeeCubit().deleteEmployee(index);
+                            },
                           ),
                         ),
                       ],
-                      child: ListTile(
-                        title: Text(
-                          "Title",
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                color: AppColors.employeeTextBlack,
-                              ),
-                        ),
-                        subtitle: Text(
-                          "Subtitle \nsample",
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                color: AppColors.employeeTextBlack,
-                              ),
+                      child: InkWell(
+                        onTap: () {
+                          print(state.empl[index].employeeId);
+                        },
+                        child: ListTile(
+                          title: Text(
+                            state.empl[index].employeeName,
+                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                  color: AppColors.employeeTextBlack,
+                                ),
+                          ),
+                          subtitle: Text(
+                            '${state.empl[index].employeeId} - ${state.empl[index].employeeDesignation}\n${state.empl[index].from} - ${state.empl[index].to}',
+                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                  color: AppColors.employeeTextBlack,
+                                ),
+                          ),
                         ),
                       ),
                     );
@@ -78,13 +88,15 @@ class EmployeeList extends StatelessWidget {
           },
           builder: (_, state) {
             print('object state : $state');
-            if (state is EmployeeLoading) {
+            if (state is EmployeeInitial) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is EmployeeLoading) {
               return const Center(child: CircularProgressIndicator());
             } else if (state is EmployeeSuccess) {
               return ListView(
                 children: ListTile.divideTiles(
                   context: context,
-                  tiles: List.generate(42, (index) {
+                  tiles: List.generate(state.empl.length, (index) {
                     return CustomSlideMenu(
                       menuItems: <Widget>[
                         Container(
@@ -96,22 +108,30 @@ class EmployeeList extends StatelessWidget {
                               Icons.delete_forever_outlined,
                               size: 36,
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              print(index.toString());
+                              EmployeeCubit().deleteEmployee(index);
+                            },
                           ),
                         ),
                       ],
-                      child: ListTile(
-                        title: Text(
-                          "Title",
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                color: AppColors.employeeTextBlack,
-                              ),
-                        ),
-                        subtitle: Text(
-                          "Subtitle \nsample",
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                color: AppColors.employeeTextBlack,
-                              ),
+                      child: InkWell(
+                        onTap: () {
+                          print(state.empl[index].employeeId);
+                        },
+                        child: ListTile(
+                          title: Text(
+                            state.empl[index].employeeName,
+                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                  color: AppColors.employeeTextBlack,
+                                ),
+                          ),
+                          subtitle: Text(
+                            '${state.empl[index].employeeId} - ${state.empl[index].employeeDesignation}\n${state.empl[index].from} - ${state.empl[index].to}',
+                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                  color: AppColors.employeeTextBlack,
+                                ),
+                          ),
                         ),
                       ),
                     );
@@ -132,10 +152,10 @@ class EmployeeList extends StatelessWidget {
             Radius.circular(8.0),
           ),
         ),
-        onPressed: () => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => AddEmployee()),
-        ),
+        onPressed: () {
+          Nav.popAndPush(context, route: AppRoutes.addEmployee);
+          // Nav.popAndPush(context, route: AppRoutes.sample);
+        },
         child: const Icon(
           Icons.add,
           color: AppColors.employeeWhite,
