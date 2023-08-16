@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 extension DateTimeUtil on DateTime {
   /// Generate a new DateTime instance with a zero time.
   DateTime toZeroTime() => DateTime.utc(year, month, day, 12);
@@ -53,6 +55,11 @@ extension DateTimeUtil on DateTime {
   bool isSameDate(DateTime other) {
     return year == other.year && month == other.month && day == other.day;
   }
+
+  String toFormat() {
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    return formatter.format(this);
+  }
 }
 
 extension DateTimeUtilInt on int {
@@ -76,29 +83,29 @@ extension DateTimeUtilInt on int {
 
   String toMonth() {
     if (this == 1) {
-      return 'JAN';
+      return 'January';
     } else if (this == 2) {
-      return 'FEB';
+      return 'February';
     } else if (this == 3) {
-      return 'MAR';
+      return 'March';
     } else if (this == 4) {
-      return 'APR';
+      return 'April';
     } else if (this == 5) {
-      return 'MAY';
+      return 'May';
     } else if (this == 6) {
-      return 'JUN';
+      return 'June';
     } else if (this == 7) {
-      return 'JUL';
+      return 'July';
     } else if (this == 8) {
-      return 'AUG';
+      return 'August';
     } else if (this == 9) {
-      return 'SEP';
+      return 'September';
     } else if (this == 10) {
-      return 'OCT';
+      return 'October';
     } else if (this == 11) {
-      return 'NOV';
+      return 'November';
     } else {
-      return 'DEC';
+      return 'December';
     }
   }
 }

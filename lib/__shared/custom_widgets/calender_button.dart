@@ -1,8 +1,11 @@
+import 'package:employee/utils/app_assets.dart';
+import 'package:employee/utils/app_colors.dart';
 import 'package:employee/utils/app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class CalenderButton extends StatelessWidget {
-  final String? date;
+  final DateTime? date;
   final Function() onTap;
 
   const CalenderButton({
@@ -23,14 +26,12 @@ class CalenderButton extends StatelessWidget {
         ),
         child: Row(
           children: [
-            const Icon(
-              Icons.calendar_month,
-              color: Colors.black,
-            ),
+            SvgPicture.asset(AppIcons.calendar),
             const SizedBox(width: 20),
             Text(
-              date ?? 'No Date',
-              style: AppExTheme.bodySmall(context),
+              date.toString() != null ? 'No Date' : date.toString(),
+              style: AppExTheme.bodySmall(context)
+                  .copyWith(color: date.toString() != null ? AppColors.employeeGrey : AppColors.employeeTextBlack),
             ),
           ],
         ),

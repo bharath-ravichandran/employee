@@ -63,7 +63,9 @@ class _AddEmployeeState extends State<AddEmployee> {
                 validator: _fieldValidator,
               ),
               const SizedBox(height: 20),
-              CustomDropDownWidget(),
+              CustomDropDownWidget(
+                selectedValue: (_) {},
+              ),
               Expanded(child: Container()),
               const Divider(),
               Row(

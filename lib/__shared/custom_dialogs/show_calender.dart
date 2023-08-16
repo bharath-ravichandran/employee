@@ -7,29 +7,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../custom_widgets/custom_cancel_button_widget.dart';
 
-Future<void> showCalender(context, bool fromDate) {
-  return showDialog(
-    context: context,
-    builder: (_) {
-      return Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Material(
-            color: Colors.white,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 12,
-              ),
-              child: CalendarWidget(fromDate: fromDate),
-            ),
-          ),
-        ],
-      );
-    },
-  );
-}
-
 class CalendarWidget extends StatefulWidget {
   final bool fromDate;
 
@@ -63,26 +40,38 @@ class _CalendarWidgetState extends State<CalendarWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
-                child: AppButton(
-                  label: 'Today',
-                  color: checkToday(selectedDate, DateTime.now()) ? Colors.blue : null,
-                  onPressed: () {
-                    var currentDate = DateTime.now();
-                    var startDate = DateTime(currentDate.year, currentDate.month, 1).weekday;
-                    selectedDate = DateTime(
-                      currentDate.year,
-                      currentDate.month,
-                      currentDate.day - startDate + 2,
-                    );
-                    setState(() {});
-                  },
-                ),
+                child: todayButton(),
               ),
               const SizedBox(width: 16),
               Expanded(
                 child: AppButton(
                   label: 'Next Monday',
-                  onPressed: () {},
+                  textColor: checkToday(
+                    selectedDate,
+                    DateTime.now().add(
+                      Duration(days: 7 - DateTime.now().weekday + 1),
+                    ),
+                  )
+                      ? Colors.white
+                      : null,
+                  color: checkToday(
+                    selectedDate,
+                    DateTime.now().add(
+                      Duration(days: 7 - DateTime.now().weekday + 1),
+                    ),
+                  )
+                      ? Colors.blue
+                      : null,
+                  onPressed: () {
+                    var currentDate = DateTime.now();
+                    var startDate = currentDate.weekday;
+                    selectedDate = DateTime(
+                      currentDate.year,
+                      currentDate.month,
+                      currentDate.day + startDate + 2,
+                    );
+                    setState(() {});
+                  },
                 ),
               ),
             ],
@@ -92,14 +81,47 @@ class _CalendarWidgetState extends State<CalendarWidget> {
             children: [
               Expanded(
                 child: AppButton(
-                  label: 'Next Monday',
-                  onPressed: () {},
+                  label: 'Next Tuesday',
+                  textColor: checkToday(
+                    selectedDate,
+                    DateTime.now().add(
+                      Duration(days: 7 - DateTime.now().weekday + 2),
+                    ),
+                  )
+                      ? Colors.white
+                      : null,
+                  color: checkToday(
+                    selectedDate,
+                    DateTime.now().add(
+                      Duration(days: 7 - DateTime.now().weekday + 2),
+                    ),
+                  )
+                      ? Colors.blue
+                      : null,
+                  onPressed: () {
+                    var currentDate = DateTime.now();
+                    var startDate = currentDate.weekday;
+                    selectedDate = DateTime(
+                      currentDate.year,
+                      currentDate.month,
+                      currentDate.day + startDate + 3,
+                    );
+                    setState(() {});
+                  },
                 ),
               ),
               const SizedBox(width: 16),
               Expanded(
                 child: AppButton(
                   label: 'After 1 week',
+                  textColor: checkToday(
+                    selectedDate,
+                    DateTime.now().add(
+                      const Duration(days: 7),
+                    ),
+                  )
+                      ? Colors.white
+                      : null,
                   color: checkToday(
                     selectedDate,
                     DateTime.now().add(
@@ -133,15 +155,11 @@ class _CalendarWidgetState extends State<CalendarWidget> {
               ),
               const SizedBox(width: 16),
               Expanded(
-                child: AppButton(
-                  label: 'Today',
-                  onPressed: () {},
-                ),
+                child: todayButton(),
               ),
             ],
           ),
         ],
-        const SizedBox(height: 20),
         const SizedBox(height: 20),
         Row(
           mainAxisSize: MainAxisSize.min,
@@ -245,7 +263,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
             SvgPicture.asset(AppIcons.calendar),
             const SizedBox(width: 20),
             Text(
-              '',
+              selectedDate?.toFormat() ?? '',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: AppColors.employeeTextBlack,
                   ),
@@ -253,12 +271,49 @@ class _CalendarWidgetState extends State<CalendarWidget> {
             const Expanded(
               child: SizedBox.shrink(),
             ),
-            AppButton(onPressed: () {}, label: 'Cancel'),
+            AppButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                label: 'Cancel'),
             const SizedBox(width: 16),
-            AppButton(onPressed: () {}, label: 'Save')
+            AppButton(
+                onPressed: () {
+                  Navigator.of(context).pop(selectedDate);
+                  // print('object save : $selectedDate');
+                },
+                label: 'Save')
           ],
         ),
       ],
+    );
+  }
+
+  Widget todayButton() {
+    return AppButton(
+      label: 'Today',
+      textColor: checkToday(
+        selectedDate,
+        DateTime.now(),
+      )
+          ? Colors.white
+          : null,
+      color: checkToday(
+        selectedDate,
+        DateTime.now(),
+      )
+          ? Colors.blue
+          : null,
+      onPressed: () {
+        var currentDate = DateTime.now();
+        var startDate = DateTime(currentDate.year, currentDate.month, 1).weekday;
+        selectedDate = DateTime(
+          currentDate.year,
+          currentDate.month,
+          currentDate.day - startDate + 2,
+        );
+        setState(() {});
+      },
     );
   }
 
@@ -280,10 +335,6 @@ class _CalendarWidgetState extends State<CalendarWidget> {
       if (selectedDate.year == currentDate.year) {
         if (selectedDate.month == currentDate.month) {
           var currentDay = currentDate.day - startDate + 1;
-          print('getBorderColor-selectedDate: $selectedDate');
-          print('getBorderColor-currentDate: $currentDate');
-          print('getBorderColor-indexDay: $currentDay');
-          print('getBorderColor-currentDay: $currentDay');
           if (indexDay == currentDay) {
             return Colors.blue;
           }
@@ -294,14 +345,9 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   }
 
   bool checkToday(DateTime? selectedDate, DateTime currentDate) {
-    print('checkToday-selectedDate: $selectedDate');
-    print('checkToday-currentDate: $currentDate');
-
     if (selectedDate != null) {
       if (selectedDate.year == currentDate.year) {
         if (selectedDate.month == currentDate.month) {
-          print('checkToday-currentDate: ${currentDate.day}');
-          print('checkToday-selectedDate: ${selectedDate.day}');
           if (selectedDate.day == currentDate.day) {
             return true;
           }

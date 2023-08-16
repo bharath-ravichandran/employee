@@ -7,6 +7,7 @@ import 'package:employee/__shared/custom_widgets/custom_save_button_widget.dart'
 import 'package:employee/bloc/cubit/employee_cubit.dart';
 import 'package:employee/models/employee_hive_model.dart';
 import 'package:employee/utils/app_assets.dart';
+import 'package:employee/utils/app_colors.dart';
 import 'package:employee/utils/app_routes.dart';
 import 'package:employee/utils/navigation_service.dart';
 import 'package:flutter/material.dart';
@@ -24,10 +25,11 @@ class Sample extends StatelessWidget {
   final _employeeFormKey = GlobalKey<FormState>();
   late final Box box;
 
-  String? fromDate, toDate;
+  DateTime? fromDate, toDate;
 
   @override
   Widget build(BuildContext context) {
+    var role;
     return BlocProvider.value(
       value: EmployeeCubit(),
       child: Scaffold(
@@ -40,77 +42,142 @@ class Sample extends StatelessWidget {
           ),
           backgroundColor: Colors.lightBlue,
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Form(
-            key: _employeeFormKey,
-            child: Column(
-              children: [
-                CustomInputTextFieldWidget(
-                  hintLabel: 'Employee name',
-                  controller: nameController,
-                  prefixWidget: SvgPicture.asset(AppIcons.person, width: 2),
-                  validator: _fieldValidator,
-                ),
-                const SizedBox(height: 20),
-                CustomDropDownWidget(),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        body: BlocBuilder<EmployeeCubit, EmployeeState>(
+          bloc: EmployeeCubit(),
+          builder: (_, state) {
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Form(
+                key: _employeeFormKey,
+                child: Column(
                   children: [
-                    Expanded(
-                      child: CalenderButton(
-                        onTap: () async {
-                          final res = await showCalender(context, true);
-                        },
-                        date: fromDate,
-                      ),
+                    CustomInputTextFieldWidget(
+                      hintLabel: 'Employee name',
+                      controller: nameController,
+                      prefixWidget: SvgPicture.asset(AppIcons.person, width: 2),
+                      validator: _fieldValidator,
                     ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16),
-                      child: Icon(
-                        Icons.arrow_right_alt,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    Expanded(
-                      child: CalenderButton(
-                        onTap: () async {
-                          final res = await showCalender(context, false);
-                        },
-                        date: toDate,
-                      ),
-                    ),
-                  ],
-                ),
-                Expanded(child: Container()),
-                const Divider(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    AppButton(
-                      onPressed: () => Navigator.of(context).pop(),
-                      label: 'Cancel',
-                    ),
-                    const SizedBox(width: 20),
-                    CustomSaveButton(
-                      onPressed: () async {
-                        if (_employeeFormKey.currentState!.validate()) {
-                          addEmployee(
-                            nameController.text,
-                            'SE',
-                            '01-01-2000',
-                            '01-01-2001',
-                          );
-                          Nav.popAndPush(context, route: AppRoutes.employeeList);
-                        }
+                    const SizedBox(height: 20),
+                    CustomDropDownWidget(
+                      selectedValue: (String data) {
+                        print('calling on data : $data');
+                        role = data;
                       },
                     ),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: CalenderButton(
+                            onTap: () async {
+                              var res = await showDialog(
+                                context: context,
+                                builder: (_) {
+                                  return Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Material(
+                                          borderRadius: BorderRadius.circular(12),
+                                          color: AppColors.employeeWhite,
+                                          child: const Padding(
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: 16,
+                                              vertical: 12,
+                                            ),
+                                            child: CalendarWidget(fromDate: true),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                              print('fromdate calling1 : $res');
+                              fromDate = res;
+                              print('fromdate calling2 : $fromDate');
+                            },
+                            date: fromDate,
+                          ),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 16),
+                          child: Icon(
+                            Icons.arrow_right_alt,
+                            color: AppColors.employeeAppBar,
+                          ),
+                        ),
+                        Expanded(
+                          child: CalenderButton(
+                            onTap: () async {
+                              var res = await showDialog(
+                                context: context,
+                                builder: (_) {
+                                  return const Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Material(
+                                        color: Colors.white,
+                                        child: Padding(
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: 16,
+                                            vertical: 12,
+                                          ),
+                                          child: CalendarWidget(fromDate: false),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                              print('fromdate calling1 : $res');
+                              toDate = res;
+                              print('fromdate calling1 : $toDate');
+                            },
+                            date: toDate,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Expanded(child: Container()),
+                    const Divider(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        AppButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          label: 'Cancel',
+                        ),
+                        const SizedBox(width: 20),
+                        CustomSaveButton(
+                          onPressed: () async {
+                            if (_employeeFormKey.currentState!.validate()) {
+                              // addEmployee(
+                              //   nameController.text,
+                              //   'SE',
+                              //   '01-01-2000',
+                              //   '01-01-2001',
+                              // );
+
+                              EmployeeCubit().addEmployee(
+                                nameController.text,
+                                role,
+                                '01-01-2000',
+                                '01-01-2001',
+                              );
+                              Nav.popAndPush(context, route: AppRoutes.employeeList);
+                            }
+                          },
+                        ),
+                      ],
+                    )
                   ],
-                )
-              ],
-            ),
-          ),
+                ),
+              ),
+            );
+          },
         ),
         // body: BlocBuilder<EmployeeCubit, EmployeeState>(
         //   bloc: EmployeeCubit(),
