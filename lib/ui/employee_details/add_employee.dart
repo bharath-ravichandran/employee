@@ -1,10 +1,10 @@
 import 'dart:math';
 
-import 'package:employee/__shared/custom_widgets/custom_cancel_button_widget.dart';
-import 'package:employee/__shared/custom_widgets/custom_dropdown_widget.dart';
-import 'package:employee/__shared/custom_widgets/custom_input_texfield_widget.dart';
-import 'package:employee/__shared/custom_widgets/custom_save_button_widget.dart';
 import 'package:employee/models/employee_hive_model.dart';
+import 'package:employee/ui/__shared/custom_widgets/custom_cancel_button_widget.dart';
+import 'package:employee/ui/__shared/custom_widgets/custom_dropdown_widget.dart';
+import 'package:employee/ui/__shared/custom_widgets/custom_input_texfield_widget.dart';
+import 'package:employee/ui/__shared/custom_widgets/custom_save_button_widget.dart';
 import 'package:employee/utils/app_assets.dart';
 import 'package:employee/utils/app_routes.dart';
 import 'package:employee/utils/navigation_service.dart';

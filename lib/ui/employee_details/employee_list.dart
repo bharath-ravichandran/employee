@@ -1,5 +1,5 @@
-import 'package:employee/__shared/custom_widgets/custom_slide_menu_widget.dart';
 import 'package:employee/bloc/cubit/employee_cubit.dart';
+import 'package:employee/ui/__shared/custom_widgets/custom_slide_menu_widget.dart';
 import 'package:employee/utils/app_colors.dart';
 import 'package:employee/utils/app_routes.dart';
 import 'package:employee/utils/app_theme.dart';

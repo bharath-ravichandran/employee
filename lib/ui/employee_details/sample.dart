@@ -1,11 +1,11 @@
 import 'dart:math';
 
-import 'package:employee/__shared/custom_widgets/custom_cancel_button_widget.dart';
-import 'package:employee/__shared/custom_widgets/custom_dropdown_widget.dart';
-import 'package:employee/__shared/custom_widgets/custom_input_texfield_widget.dart';
-import 'package:employee/__shared/custom_widgets/custom_save_button_widget.dart';
 import 'package:employee/bloc/cubit/employee_cubit.dart';
 import 'package:employee/models/employee_hive_model.dart';
+import 'package:employee/ui/__shared/custom_widgets/custom_cancel_button_widget.dart';
+import 'package:employee/ui/__shared/custom_widgets/custom_dropdown_widget.dart';
+import 'package:employee/ui/__shared/custom_widgets/custom_input_texfield_widget.dart';
+import 'package:employee/ui/__shared/custom_widgets/custom_save_button_widget.dart';
 import 'package:employee/utils/app_assets.dart';
 import 'package:employee/utils/app_colors.dart';
 import 'package:employee/utils/app_routes.dart';
@@ -15,8 +15,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hive/hive.dart';
 
-import '../../__shared/custom_dialogs/show_calender.dart';
-import '../../__shared/custom_widgets/calender_button.dart';
+import '../../ui/__shared/custom_dialogs/show_calender.dart';
+import '../../ui/__shared/custom_widgets/calender_button.dart';
 
 class Sample extends StatelessWidget {
   Sample({super.key});
