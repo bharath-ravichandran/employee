@@ -20,7 +20,6 @@ class EmployeeCubit extends Cubit<EmployeeState> {
     Random random = Random();
     int randomNumber = random.nextInt(100);
     Employee newEmployee = Employee(
-      randomNumber.toString(),
       employeeId: randomNumber.toString(),
       employeeName: name,
       employeeDesignation: designation,
@@ -34,21 +33,79 @@ class EmployeeCubit extends Cubit<EmployeeState> {
     }
   }
 
+  getEmployee(int key) {
+    emit(EmployeeLoading());
+    final Employee item = employee.get(key);
+    print('edit emp : $item');
+    // emit(EditEmployeeState(item));
+  }
+
+  editEmployee(Employee emp) {
+    print('object edit cubit : $emp');
+    emit(EditEmployeeState(emp));
+  }
+
   getAllEmployees() async {
     emit(EmployeeLoading());
     final employeeMap = employee.values;
     for (Employee emp in employeeMap) {
+      print('employeeMap : ${employeeMap.first}');
+
       list.add(emp);
     }
-    emit(EmployeeSuccess(empl: list));
+    print('cubit object : $list');
+    if (list.isEmpty) {
+      emit(EmployeeInitial());
+    } else {
+      emit(EmployeeSuccess(empl: list));
+    }
   }
 
-  deleteEmployee(int key) async {
+  deleteEmployee(String id) async {
+    //   emit(EmployeeLoading());
+    //   if (kDebugMode) {
+    //     print('delete : ${key.runtimeType}');
+    //   }
+    //   await employee.delete(key);
+    //
+    //   list.clear();
+    //
+    //   final employeeMap = employee.values;
+    //   for (Employee emp in employeeMap) {
+    //     list.add(emp);
+    //   }
+    //   print('cubit object : $list');
+    //   if (list.isEmpty) {
+    //     emit(EmployeeInitial());
+    //   } else {
+    //     emit(EmployeeSuccess(empl: list));
+    //   }
+    // }
+
     emit(EmployeeLoading());
-    if (kDebugMode) {
-      print('delete : ${key.runtimeType}');
+
+    final Map<dynamic, dynamic> deliveriesMap = employee.toMap();
+    dynamic desiredKey;
+    deliveriesMap.forEach((key, value) {
+      if (value.employeeId == id) {
+        desiredKey = key;
+        print('object desiredKey:$desiredKey');
+        print('object key:$key');
+      }
+    });
+    employee.delete(desiredKey);
+
+    list.clear();
+
+    final employeeMap = employee.values;
+    for (Employee emp in employeeMap) {
+      list.add(emp);
     }
-    await employee.delete(key);
-    emit(const EmployeeSuccess(empl: []));
+    print('cubit object dele emp : ${list.isEmpty}');
+    if (list.isEmpty) {
+      emit(EmployeeInitial());
+    } else {
+      emit(EmployeeSuccess(empl: list));
+    }
   }
 }

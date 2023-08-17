@@ -12,7 +12,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
     case AppRoutes.employeeList:
       return MaterialPageRoute(
-        builder: (_) => const EmployeeList(),
+        builder: (_) => EmployeeList(),
       );
 
     case AppRoutes.sample:
@@ -22,12 +22,12 @@ Route<dynamic> generateRoute(RouteSettings settings) {
 
     case AppRoutes.addEmployee:
       return MaterialPageRoute(
-        builder: (_) => const AddEmployee(),
+        builder: (_) => AddEmployee(),
       );
 
     case AppRoutes.editEmployee:
       return MaterialPageRoute(
-        builder: (_) => const EditEmployee(),
+        builder: (_) => EditEmployee(),
       );
 
     default:

@@ -9,7 +9,7 @@ class ErrorPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Error - Something went wrong',
+          message!,
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                 color: Colors.white,
               ),

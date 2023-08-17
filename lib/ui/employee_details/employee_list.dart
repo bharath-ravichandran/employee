@@ -1,5 +1,7 @@
 import 'package:employee/bloc/cubit/employee_cubit.dart';
 import 'package:employee/ui/__shared/custom_widgets/custom_slide_menu_widget.dart';
+import 'package:employee/ui/employee_details/edit_employee.dart';
+import 'package:employee/utils/app_assets.dart';
 import 'package:employee/utils/app_colors.dart';
 import 'package:employee/utils/app_routes.dart';
 import 'package:employee/utils/app_theme.dart';
@@ -10,7 +12,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'error_page.dart';
 
 class EmployeeList extends StatelessWidget {
-  const EmployeeList({super.key});
+  EmployeeList({super.key});
+
+  final EmployeeCubit employeeCubit = EmployeeCubit();
 
   @override
   Widget build(BuildContext context) {
@@ -22,20 +26,22 @@ class EmployeeList extends StatelessWidget {
         ),
         backgroundColor: Colors.lightBlue,
       ),
-      body:
-          // Center(
-          //   child: Image.asset(AppIcons.notFound),
-          // ),
-          BlocProvider.value(
-        value: EmployeeCubit(),
+      body: BlocProvider.value(
+        value: employeeCubit,
         child: BlocConsumer<EmployeeCubit, EmployeeState>(
-          bloc: EmployeeCubit()..getAllEmployees(),
+          bloc: employeeCubit..getAllEmployees(),
           listener: (_, state) {
             print('object state : $state');
             if (state is EmployeeInitial) {
-              const Center(child: CircularProgressIndicator());
+              Center(
+                child: Image.asset(AppImages.notFound),
+              );
             } else if (state is EmployeeLoading) {
               const Center(child: CircularProgressIndicator());
+            } else if (state is EditEmployeeState) {
+              EditEmployee(
+                employee: state.employee,
+              );
             } else if (state is EmployeeSuccess) {
               ListView(
                 children: ListTile.divideTiles(
@@ -54,7 +60,7 @@ class EmployeeList extends StatelessWidget {
                             ),
                             onPressed: () {
                               print(state.empl[index].employeeId);
-                              EmployeeCubit().deleteEmployee(index);
+                              employeeCubit.deleteEmployee(state.empl[index].employeeId);
                               Nav.snackBar(context, message: 'Employee data has been deleted');
                             },
                           ),
@@ -63,20 +69,16 @@ class EmployeeList extends StatelessWidget {
                       child: InkWell(
                         onTap: () {
                           print(state.empl[index].employeeId);
+                          employeeCubit.getEmployee(index);
+                          Nav.to(context, route: AppRoutes.editEmployee);
                         },
                         child: ListTile(
                           title: Text(
                             state.empl[index].employeeName,
-                            // style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            //       color: AppColors.employeeTextBlack,
-                            //     ),
                             style: AppExTheme.headlineSmall(context).copyWith(color: AppColors.employeeTextBlack),
                           ),
                           subtitle: Text(
                             '${state.empl[index].employeeId} - ${state.empl[index].employeeDesignation}\n${state.empl[index].from} - ${state.empl[index].to}',
-                            // style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            //       color: AppColors.employeeTextBlack,
-                            //     ),
                             style: AppExTheme.headlineSmall(context).copyWith(color: AppColors.employeeTextBlack),
                           ),
                         ),
@@ -92,9 +94,15 @@ class EmployeeList extends StatelessWidget {
           builder: (_, state) {
             print('object state : $state');
             if (state is EmployeeInitial) {
-              return const Center(child: CircularProgressIndicator());
+              return Center(
+                child: Image.asset(AppImages.notFound),
+              );
             } else if (state is EmployeeLoading) {
               return const Center(child: CircularProgressIndicator());
+            } else if (state is EditEmployeeState) {
+              return EditEmployee(
+                employee: state.employee,
+              );
             } else if (state is EmployeeSuccess) {
               return Column(
                 children: [
@@ -116,7 +124,7 @@ class EmployeeList extends StatelessWidget {
                                   ),
                                   onPressed: () {
                                     print(index.toString());
-                                    EmployeeCubit().deleteEmployee(index);
+                                    employeeCubit.deleteEmployee(state.empl[index].employeeId);
                                     Nav.snackBar(context, message: 'Employee data has been deleted');
                                   },
                                 ),
@@ -125,20 +133,16 @@ class EmployeeList extends StatelessWidget {
                             child: InkWell(
                               onTap: () {
                                 print(state.empl[index].employeeId);
+                                employeeCubit.getEmployee(index);
+                                Nav.to(context, route: AppRoutes.editEmployee);
                               },
                               child: ListTile(
                                 title: Text(
                                   state.empl[index].employeeName,
-                                  // style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                  //       color: AppColors.employeeTextBlack,
-                                  //     ),
                                   style: AppExTheme.headlineSmall(context).copyWith(color: AppColors.employeeTextBlack),
                                 ),
                                 subtitle: Text(
                                   '${state.empl[index].employeeId} - ${state.empl[index].employeeDesignation}\n${state.empl[index].from} - ${state.empl[index].to}',
-                                  // style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                  //       color: AppColors.employeeTextBlack,
-                                  //     ),
                                   style: AppExTheme.titleSmall(context).copyWith(color: AppColors.employeeTextBlack),
                                 ),
                               ),
@@ -176,8 +180,8 @@ class EmployeeList extends StatelessWidget {
           ),
         ),
         onPressed: () {
-          //Nav.popAndPush(context, route: AppRoutes.addEmployee);
-          Nav.popAndPush(context, route: AppRoutes.sample);
+          Nav.popAndPush(context, route: AppRoutes.addEmployee);
+          // Nav.popAndPush(context, route: AppRoutes.sample);
         },
         child: const Icon(
           Icons.add,

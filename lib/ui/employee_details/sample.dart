@@ -212,7 +212,6 @@ class Sample extends StatelessWidget {
     Random random = Random();
     int randomNumber = random.nextInt(100);
     Employee newEmployee = Employee(
-      randomNumber.toString(),
       employeeId: randomNumber.toString(),
       employeeName: name,
       employeeDesignation: designation,

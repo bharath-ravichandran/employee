@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
           title: 'Realtime Innovations Assignment',
           navigatorKey: rootNavKey,
           theme: AppTheme.init(),
-          home: const EmployeeList(),
+          home: EmployeeList(),
           initialRoute: AppRoutes.onboarding,
           onGenerateRoute: generateRoute,
         );

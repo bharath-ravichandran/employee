@@ -15,6 +15,12 @@ class EmployeeInitial extends EmployeeState {
 
 class EmployeeLoading extends EmployeeState {}
 
+class EditEmployeeState extends EmployeeState {
+  final Employee employee;
+
+  const EditEmployeeState(this.employee);
+}
+
 class EmployeeSuccess extends EmployeeState {
   final List<Employee> empl;
 
