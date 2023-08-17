@@ -14,6 +14,7 @@ class EmployeeCubit extends Cubit<EmployeeState> {
 
   late final List<Employee> list = [];
 
+  //add employee cubit
   addEmployee(String name, String designation, String from, String to) async {
     emit(EmployeeLoading());
     Random random = Random();
@@ -25,8 +26,11 @@ class EmployeeCubit extends Cubit<EmployeeState> {
       from: from,
       to: to,
     );
+
+    employee.add(newEmployee);
   }
 
+  //get employee cubit
   getEmployee(String id) {
     emit(EmployeeLoading());
 
@@ -39,10 +43,10 @@ class EmployeeCubit extends Cubit<EmployeeState> {
     });
 
     final Employee item = employee.get(desiredKey);
-    print('edit emp : $item');
     emit(EditEmployeeState(item));
   }
 
+  //update employee cubit
   updateEmployee(Employee emp) async {
     emit(EmployeeLoading());
 
@@ -63,6 +67,7 @@ class EmployeeCubit extends Cubit<EmployeeState> {
     }
   }
 
+  //get all employees cubit
   getAllEmployees() async {
     emit(EmployeeLoading());
     final employeeMap = employee.values;
@@ -76,6 +81,7 @@ class EmployeeCubit extends Cubit<EmployeeState> {
     }
   }
 
+  //delete employee cubit
   deleteEmployee(String id) async {
     emit(EmployeeLoading());
 
