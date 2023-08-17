@@ -25,8 +25,6 @@ class EmployeeCubit extends Cubit<EmployeeState> {
       from: from,
       to: to,
     );
-
-    var a = employee.add(newEmployee);
   }
 
   getEmployee(String id) {
