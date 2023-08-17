@@ -4,16 +4,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class CustomDropDownWidget extends StatefulWidget {
-  final void Function(String) selectedValue;
+  String? editVal;
+  final void Function(String val) selectedValue;
 
-  const CustomDropDownWidget({super.key, required this.selectedValue});
+  CustomDropDownWidget({
+    super.key,
+    required this.selectedValue,
+    this.editVal,
+  });
   @override
   _CustomDropDownWidgetState createState() => _CustomDropDownWidgetState();
 }
 
 class _CustomDropDownWidgetState extends State<CustomDropDownWidget> {
   String? _selected;
-  final List<String> _items = ['Product Designer', 'Flutter Developer', 'QA Tester', 'Product Owner'];
+  final List<String> _items = [
+    'Product Designer',
+    'Flutter Developer',
+    'QA Tester',
+    'Product Owner',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -21,8 +31,6 @@ class _CustomDropDownWidgetState extends State<CustomDropDownWidget> {
       children: <Widget>[
         InkWell(
           onTap: () async {
-            // var res = await showModal(context);
-            // print('res val : $res');
             var res = await showModalBottomSheet(
               context: context,
               backgroundColor: AppColors.employeeWhite,
@@ -47,6 +55,7 @@ class _CustomDropDownWidgetState extends State<CustomDropDownWidget> {
                           ),
                           onTap: () async {
                             setState(() {
+                              widget.editVal = null;
                               _selected = _items[index];
                             });
                             Navigator.of(context).pop(_selected);
@@ -76,12 +85,20 @@ class _CustomDropDownWidgetState extends State<CustomDropDownWidget> {
                 const SizedBox(width: 10),
                 SvgPicture.asset(AppIcons.work),
                 const SizedBox(width: 10),
-                Text(
-                  _selected ?? 'Select Role',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyLarge
-                      ?.copyWith(color: _selected != null ? AppColors.employeeTextBlack : AppColors.employeeGrey),
+                Visibility(
+                  visible: (widget.editVal != null),
+                  replacement: Text(
+                    _selected ?? 'Select Role',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyLarge
+                        ?.copyWith(color: _selected != null ? AppColors.employeeTextBlack : AppColors.employeeGrey),
+                  ),
+                  child: Text(
+                    widget.editVal ?? 'Select Role',
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: widget.editVal != null ? AppColors.employeeTextBlack : AppColors.employeeGrey),
+                  ),
                 ),
                 const Expanded(child: SizedBox.shrink()),
                 SvgPicture.asset(AppIcons.arrowDropdown),

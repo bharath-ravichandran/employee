@@ -1,5 +1,5 @@
 import 'package:employee/bloc/cubit/employee_cubit.dart';
-import 'package:employee/ui/__shared/custom_widgets/custom_cancel_button_widget.dart';
+import 'package:employee/ui/__shared/custom_widgets/custom_app_button_widget.dart';
 import 'package:employee/ui/__shared/custom_widgets/custom_dropdown_widget.dart';
 import 'package:employee/ui/__shared/custom_widgets/custom_input_texfield_widget.dart';
 import 'package:employee/ui/__shared/custom_widgets/custom_save_button_widget.dart';
@@ -12,15 +12,22 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hive/hive.dart';
 
-import '../../ui/__shared/custom_dialogs/show_calender.dart';
 import '../../ui/__shared/custom_widgets/calender_button.dart';
 
-class AddEmployee extends StatelessWidget {
+class AddEmployee extends StatefulWidget {
   AddEmployee({super.key});
 
+  @override
+  State<AddEmployee> createState() => _AddEmployeeState();
+}
+
+class _AddEmployeeState extends State<AddEmployee> {
   final EmployeeCubit employeeCubit = EmployeeCubit();
+
   final TextEditingController nameController = TextEditingController();
+
   final _employeeFormKey = GlobalKey<FormState>();
+
   late final Box box;
 
   DateTime? fromDate, toDate;
@@ -67,38 +74,7 @@ class AddEmployee extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Expanded(
-                          child: CalenderButton(
-                            onTap: () async {
-                              var res = await showDialog(
-                                context: context,
-                                builder: (_) {
-                                  return Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Material(
-                                          borderRadius: BorderRadius.circular(12),
-                                          color: AppColors.employeeWhite,
-                                          child: const Padding(
-                                            padding: EdgeInsets.symmetric(
-                                              horizontal: 16,
-                                              vertical: 12,
-                                            ),
-                                            child: CalendarWidget(fromDate: true),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                              print('fromdate calling1 : $res');
-                              fromDate = res;
-                              print('fromdate calling2 : $fromDate');
-                            },
-                            date: fromDate,
-                          ),
+                          child: CalenderButton(fromDate: true),
                         ),
                         const Padding(
                           padding: EdgeInsets.symmetric(horizontal: 16),
@@ -108,34 +84,7 @@ class AddEmployee extends StatelessWidget {
                           ),
                         ),
                         Expanded(
-                          child: CalenderButton(
-                            onTap: () async {
-                              var res = await showDialog(
-                                context: context,
-                                builder: (_) {
-                                  return const Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Material(
-                                        color: Colors.white,
-                                        child: Padding(
-                                          padding: EdgeInsets.symmetric(
-                                            horizontal: 16,
-                                            vertical: 12,
-                                          ),
-                                          child: CalendarWidget(fromDate: false),
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                              print('fromdate calling1 : $res');
-                              toDate = res;
-                              print('fromdate calling1 : $toDate');
-                            },
-                            date: toDate,
-                          ),
+                          child: CalenderButton(fromDate: false),
                         ),
                       ],
                     ),
@@ -151,14 +100,20 @@ class AddEmployee extends StatelessWidget {
                         const SizedBox(width: 20),
                         CustomSaveButton(
                           onPressed: () async {
-                            if (_employeeFormKey.currentState!.validate()) {
-                              employeeCubit.addEmployee(
-                                nameController.text,
-                                role,
-                                '01-01-2000',
-                                '01-01-2001',
-                              );
-                              Nav.popAndPush(context, route: AppRoutes.employeeList);
+                            if (role == null) {
+                              Nav.snackBar(context, message: 'Please select role of the employee');
+                            } else {
+                              if (_employeeFormKey.currentState!.validate()) {
+                                employeeCubit.addEmployee(
+                                  nameController.text,
+                                  role,
+                                  CalenderButton(
+                                    fromDate: false,
+                                  ).from.toString(),
+                                  CalenderButton(fromDate: true).to.toString(),
+                                );
+                                Nav.popAndPush(context, route: AppRoutes.employeeList);
+                              }
                             }
                           },
                         ),

@@ -27,6 +27,7 @@ class MyApp extends StatelessWidget {
         );
         return MaterialApp(
           title: 'Realtime Innovations Assignment',
+          debugShowCheckedModeBanner: false,
           navigatorKey: rootNavKey,
           theme: AppTheme.init(),
           home: EmployeeList(),

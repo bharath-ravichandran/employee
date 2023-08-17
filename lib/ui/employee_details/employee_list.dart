@@ -40,7 +40,7 @@ class EmployeeList extends StatelessWidget {
               const Center(child: CircularProgressIndicator());
             } else if (state is EditEmployeeState) {
               EditEmployee(
-                employee: state.employee,
+                employeeId: state.employee.employeeId,
               );
             } else if (state is EmployeeSuccess) {
               ListView(
@@ -69,8 +69,8 @@ class EmployeeList extends StatelessWidget {
                       child: InkWell(
                         onTap: () {
                           print(state.empl[index].employeeId);
-                          employeeCubit.getEmployee(index);
-                          Nav.to(context, route: AppRoutes.editEmployee);
+                          // employeeCubit.getEmployee(state.empl[index].employeeId);
+                          Nav.to(context, route: AppRoutes.editEmployee, arguments: state.empl[index].employeeId);
                         },
                         child: ListTile(
                           title: Text(
@@ -101,7 +101,7 @@ class EmployeeList extends StatelessWidget {
               return const Center(child: CircularProgressIndicator());
             } else if (state is EditEmployeeState) {
               return EditEmployee(
-                employee: state.employee,
+                employeeId: state.employee.employeeId,
               );
             } else if (state is EmployeeSuccess) {
               return Column(
@@ -133,8 +133,8 @@ class EmployeeList extends StatelessWidget {
                             child: InkWell(
                               onTap: () {
                                 print(state.empl[index].employeeId);
-                                employeeCubit.getEmployee(index);
-                                Nav.to(context, route: AppRoutes.editEmployee);
+                                // employeeCubit.getEmployee(state.empl[index].employeeId);
+                                Nav.to(context, route: AppRoutes.editEmployee, arguments: state.empl[index].employeeId);
                               },
                               child: ListTile(
                                 title: Text(
@@ -157,10 +157,13 @@ class EmployeeList extends StatelessWidget {
                     height: 50,
                     width: double.infinity,
                     color: AppColors.employeeGrey1,
-                    child: Text(
-                      'Swipe left to delete',
-                      textAlign: TextAlign.center,
-                      style: AppExTheme.bodySmall(context).copyWith(color: AppColors.employeeGrey),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'Swipe left to delete',
+                        textAlign: TextAlign.center,
+                        style: AppExTheme.bodySmall(context).copyWith(color: AppColors.employeeGrey),
+                      ),
                     ),
                   )
                 ],
@@ -180,8 +183,8 @@ class EmployeeList extends StatelessWidget {
           ),
         ),
         onPressed: () {
-          Nav.popAndPush(context, route: AppRoutes.addEmployee);
-          // Nav.popAndPush(context, route: AppRoutes.sample);
+          // Nav.popAndPush(context, route: AppRoutes.addEmployee);
+          Nav.popAndPush(context, route: AppRoutes.sample);
         },
         child: const Icon(
           Icons.add,

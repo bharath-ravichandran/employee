@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:employee/models/employee_hive_model.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
 
@@ -28,32 +27,50 @@ class EmployeeCubit extends Cubit<EmployeeState> {
     );
 
     var a = employee.add(newEmployee);
-    if (kDebugMode) {
-      print('Info added to box!  ${newEmployee.employeeId}, $a}');
-    }
   }
 
-  getEmployee(int key) {
+  getEmployee(String id) {
     emit(EmployeeLoading());
-    final Employee item = employee.get(key);
+
+    final Map<dynamic, dynamic> deliveriesMap = employee.toMap();
+    dynamic desiredKey;
+    deliveriesMap.forEach((key, value) {
+      if (value.employeeId == id) {
+        desiredKey = key;
+      }
+    });
+
+    final Employee item = employee.get(desiredKey);
     print('edit emp : $item');
-    // emit(EditEmployeeState(item));
+    emit(EditEmployeeState(item));
   }
 
-  editEmployee(Employee emp) {
-    print('object edit cubit : $emp');
-    emit(EditEmployeeState(emp));
+  updateEmployee(Employee emp) async {
+    emit(EmployeeLoading());
+
+    final Map<dynamic, dynamic> deliveriesMap = employee.toMap();
+    dynamic desiredKey;
+    deliveriesMap.forEach((key, value) {
+      if (value.employeeId == emp.employeeId) {
+        desiredKey = key;
+      }
+    });
+
+    await employee.put(desiredKey, emp);
+
+    if (list.isEmpty) {
+      emit(EmployeeInitial());
+    } else {
+      emit(EmployeeSuccess(empl: list));
+    }
   }
 
   getAllEmployees() async {
     emit(EmployeeLoading());
     final employeeMap = employee.values;
     for (Employee emp in employeeMap) {
-      print('employeeMap : ${employeeMap.first}');
-
       list.add(emp);
     }
-    print('cubit object : $list');
     if (list.isEmpty) {
       emit(EmployeeInitial());
     } else {
@@ -62,26 +79,6 @@ class EmployeeCubit extends Cubit<EmployeeState> {
   }
 
   deleteEmployee(String id) async {
-    //   emit(EmployeeLoading());
-    //   if (kDebugMode) {
-    //     print('delete : ${key.runtimeType}');
-    //   }
-    //   await employee.delete(key);
-    //
-    //   list.clear();
-    //
-    //   final employeeMap = employee.values;
-    //   for (Employee emp in employeeMap) {
-    //     list.add(emp);
-    //   }
-    //   print('cubit object : $list');
-    //   if (list.isEmpty) {
-    //     emit(EmployeeInitial());
-    //   } else {
-    //     emit(EmployeeSuccess(empl: list));
-    //   }
-    // }
-
     emit(EmployeeLoading());
 
     final Map<dynamic, dynamic> deliveriesMap = employee.toMap();
@@ -89,8 +86,6 @@ class EmployeeCubit extends Cubit<EmployeeState> {
     deliveriesMap.forEach((key, value) {
       if (value.employeeId == id) {
         desiredKey = key;
-        print('object desiredKey:$desiredKey');
-        print('object key:$key');
       }
     });
     employee.delete(desiredKey);
@@ -101,7 +96,6 @@ class EmployeeCubit extends Cubit<EmployeeState> {
     for (Employee emp in employeeMap) {
       list.add(emp);
     }
-    print('cubit object dele emp : ${list.isEmpty}');
     if (list.isEmpty) {
       emit(EmployeeInitial());
     } else {

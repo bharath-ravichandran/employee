@@ -1,8 +1,7 @@
 import 'package:employee/bloc/cubit/employee_cubit.dart';
 import 'package:employee/models/employee_hive_model.dart';
-import 'package:employee/ui/__shared/custom_dialogs/show_calender.dart';
 import 'package:employee/ui/__shared/custom_widgets/calender_button.dart';
-import 'package:employee/ui/__shared/custom_widgets/custom_cancel_button_widget.dart';
+import 'package:employee/ui/__shared/custom_widgets/custom_app_button_widget.dart';
 import 'package:employee/ui/__shared/custom_widgets/custom_dropdown_widget.dart';
 import 'package:employee/ui/__shared/custom_widgets/custom_input_texfield_widget.dart';
 import 'package:employee/ui/__shared/custom_widgets/custom_save_button_widget.dart';
@@ -16,17 +15,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
 class EditEmployee extends StatelessWidget {
-  final Employee? employee;
-  EditEmployee({super.key, this.employee});
+  final String employeeId;
+  EditEmployee({super.key, required this.employeeId});
 
   final EmployeeCubit employeeCubit = EmployeeCubit();
-  final TextEditingController nameController = TextEditingController();
   final _employeeFormKey = GlobalKey<FormState>();
 
   DateTime? fromDate, toDate;
 
   @override
   Widget build(BuildContext context) {
+    print('edit empl id from route : $employeeId');
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.employeeAppBar,
@@ -36,133 +35,87 @@ class EditEmployee extends StatelessWidget {
         ),
       ),
       body: BlocProvider.value(
-        value: employeeCubit,
+        value: employeeCubit..getEmployee(employeeId),
         child: BlocBuilder<EmployeeCubit, EmployeeState>(
-          bloc: employeeCubit,
+          bloc: employeeCubit..getEmployee(employeeId),
           builder: (_, state) {
             var role;
             print('edit empl: $state');
-            if (state is EditEmployee) {
-              return Form(
-                key: _employeeFormKey,
-                child: Column(
-                  children: [
-                    CustomInputTextFieldWidget(
-                      hintLabel: 'Employee name',
-                      controller: nameController,
-                      prefixWidget: SvgPicture.asset(AppIcons.person, width: 2),
-                      validator: _fieldValidator,
-                    ),
-                    const SizedBox(height: 20),
-                    CustomDropDownWidget(
-                      selectedValue: (String data) {
-                        print('calling on data : $data');
-                        role = data;
-                      },
-                    ),
-                    const SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: CalenderButton(
-                            onTap: () async {
-                              var res = await showDialog(
-                                context: context,
-                                builder: (_) {
-                                  return Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Material(
-                                          borderRadius: BorderRadius.circular(12),
-                                          color: AppColors.employeeWhite,
-                                          child: const Padding(
-                                            padding: EdgeInsets.symmetric(
-                                              horizontal: 16,
-                                              vertical: 12,
-                                            ),
-                                            child: CalendarWidget(fromDate: true),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                              print('fromdate calling1 : $res');
-                              fromDate = res;
-                              print('fromdate calling2 : $fromDate');
+            if (state is EditEmployeeState) {
+              print('after fetch : ${state.employee.employeeId}');
+              final TextEditingController nameController = TextEditingController(text: state.employee.employeeName);
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Form(
+                  key: _employeeFormKey,
+                  child: Column(
+                    children: [
+                      CustomInputTextFieldWidget(
+                        hintLabel: 'Employee name',
+                        controller: nameController,
+                        prefixWidget: SvgPicture.asset(AppIcons.person, width: 2),
+                        validator: _fieldValidator,
+                      ),
+                      const SizedBox(height: 20),
+                      CustomDropDownWidget(
+                        editVal: state.employee.employeeDesignation,
+                        selectedValue: (String data) {
+                          print('calling on data : $data');
+                          role = data;
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: CalenderButton(fromDate: true),
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 16),
+                            child: Icon(
+                              Icons.arrow_right_alt,
+                              color: AppColors.employeeAppBar,
+                            ),
+                          ),
+                          Expanded(
+                            child: CalenderButton(fromDate: false),
+                          ),
+                        ],
+                      ),
+                      Expanded(child: Container()),
+                      const Divider(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          AppButton(
+                            onPressed: () => Navigator.of(context).pop(),
+                            label: 'Cancel',
+                          ),
+                          const SizedBox(width: 20),
+                          CustomSaveButton(
+                            onPressed: () async {
+                              if (role == null) {
+                                Nav.snackBar(context, message: 'Please select role of the employee');
+                              } else {
+                                if (_employeeFormKey.currentState!.validate()) {
+                                  employeeCubit.updateEmployee(Employee(
+                                    employeeId: employeeId,
+                                    employeeName: nameController.text,
+                                    employeeDesignation: role,
+                                    from: '02-02-2000',
+                                    to: '02-02-2002',
+                                  ));
+                                  Navigator.of(context).pop();
+                                  Nav.popAndPush(context, route: AppRoutes.employeeList);
+                                }
+                              }
                             },
-                            date: fromDate,
                           ),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16),
-                          child: Icon(
-                            Icons.arrow_right_alt,
-                            color: AppColors.employeeAppBar,
-                          ),
-                        ),
-                        Expanded(
-                          child: CalenderButton(
-                            onTap: () async {
-                              var res = await showDialog(
-                                context: context,
-                                builder: (_) {
-                                  return const Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Material(
-                                        color: Colors.white,
-                                        child: Padding(
-                                          padding: EdgeInsets.symmetric(
-                                            horizontal: 16,
-                                            vertical: 12,
-                                          ),
-                                          child: CalendarWidget(fromDate: false),
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                              print('fromdate calling1 : $res');
-                              toDate = res;
-                              print('fromdate calling1 : $toDate');
-                            },
-                            date: toDate,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Expanded(child: Container()),
-                    const Divider(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        AppButton(
-                          onPressed: () => Navigator.of(context).pop(),
-                          label: 'Cancel',
-                        ),
-                        const SizedBox(width: 20),
-                        CustomSaveButton(
-                          onPressed: () async {
-                            if (_employeeFormKey.currentState!.validate()) {
-                              employeeCubit.addEmployee(
-                                nameController.text,
-                                role,
-                                '01-01-2000',
-                                '01-01-2001',
-                              );
-                              Nav.popAndPush(context, route: AppRoutes.employeeList);
-                            }
-                          },
-                        ),
-                      ],
-                    )
-                  ],
+                        ],
+                      )
+                    ],
+                  ),
                 ),
               );
             }
