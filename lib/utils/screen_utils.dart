@@ -74,8 +74,7 @@ class ScreenUtils {
   /// The ratio of the actual dp to the design draft px
   double get scaleWidth => screenWidth / uiWidthPx;
 
-  double get scaleHeight =>
-      (_screenHeight - _statusBarHeight - _bottomBarHeight) / uiHeightPx;
+  double get scaleHeight => (_screenHeight - _statusBarHeight - _bottomBarHeight) / uiHeightPx;
 
   double get scaleText => scaleWidth;
 
@@ -97,14 +96,9 @@ class ScreenUtils {
   ///Font size adaptation method
   ///@param [fontSize] The size of the font on the UI design, in px.
   ///@param [allowFontScaling]
-  double setSp(num fontSize, {bool allowFontScalingSelf = false}) =>
-      allowFontScalingSelf
-          ? (allowFontScalingSelf
-              ? (fontSize * scaleText)
-              : ((fontSize * scaleText) / _textScaleFactor))
-          : (allowFontScaling
-              ? (fontSize * scaleText)
-              : ((fontSize * scaleText) / _textScaleFactor));
+  double setSp(num fontSize, {bool allowFontScalingSelf = false}) => allowFontScalingSelf
+      ? (allowFontScalingSelf ? (fontSize * scaleText) : ((fontSize * scaleText) / _textScaleFactor))
+      : (allowFontScaling ? (fontSize * scaleText) : ((fontSize * scaleText) / _textScaleFactor));
 }
 
 extension DoubleExtension on num {
