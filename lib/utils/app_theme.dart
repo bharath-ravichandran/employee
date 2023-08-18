@@ -10,7 +10,6 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       primaryColor: AppColors.employeePrimary,
-      // accentColor: AppColors.alphaError,
       scaffoldBackgroundColor: AppColors.employeeWhite,
       brightness: Brightness.dark,
       textTheme: AppTheme.textTheme(),
@@ -25,84 +24,6 @@ class AppTheme {
   }
 
   static TextTheme get _textTheme => GoogleFonts.acmeTextTheme();
-
-  // static TextTheme get _headerTextTheme => GoogleFonts.acmeTextTheme();
-
-  static TextStyle? get _headline6 => _textTheme.headline6?.copyWith(
-        color: AppColors.employeeWhite,
-        fontSize: 18.0.sp,
-        fontWeight: FontWeight.w700,
-        letterSpacing: 0.15,
-      );
-
-  static TextStyle? get _headline5 => _textTheme.headline5?.copyWith(
-        color: AppColors.employeeWhite,
-        fontSize: 20.0.sp,
-        fontWeight: FontWeight.w700,
-        letterSpacing: 0.15,
-        height: 1.5,
-      );
-
-  static TextStyle? get _headline4 => _textTheme.headline5?.copyWith(
-        color: AppColors.employeeWhite,
-        fontSize: 22.0.sp,
-        fontWeight: FontWeight.w700,
-        letterSpacing: 0.15,
-        height: 1.5,
-      );
-
-  static TextStyle? get _headline3 => _textTheme.headline5?.copyWith(
-        color: AppColors.employeeWhite,
-        fontSize: 24.0.sp,
-        fontWeight: FontWeight.w700,
-        letterSpacing: 0.15,
-        height: 1.5,
-      );
-
-  static TextStyle? get _headline2 => _textTheme.headline5?.copyWith(
-        color: AppColors.employeeWhite,
-        fontSize: 36.0.sp,
-        fontWeight: FontWeight.w700,
-        letterSpacing: 0.15,
-        height: 1.5,
-      );
-
-  static TextStyle? get _headline1 => _textTheme.headline5?.copyWith(
-        color: AppColors.employeeWhite,
-        fontSize: 42.0.sp,
-        fontWeight: FontWeight.w700,
-        letterSpacing: 0.15,
-        height: 1.5,
-      );
-
-  static TextStyle? get _button => _textTheme.button?.copyWith(
-        color: AppColors.employeeWhite,
-        fontSize: 14.sp,
-        letterSpacing: 1.25,
-        fontWeight: FontWeight.w700,
-        height: 1.5,
-      );
-
-  static TextStyle? get _bodyText1 => _textTheme.bodyText1?.copyWith(
-        color: AppColors.employeeWhite,
-        fontSize: 16.sp,
-        letterSpacing: 0.5,
-        height: 1.5,
-      );
-
-  static TextStyle? get _bodyText2 => _textTheme.bodyText2?.copyWith(
-        color: AppColors.employeeWhite,
-        fontSize: 14.sp,
-        letterSpacing: 0.25,
-        height: 1.5,
-      );
-
-  static TextStyle? get _caption => _textTheme.caption?.copyWith(
-        color: AppColors.employeeWhite,
-        fontSize: 12.sp,
-        letterSpacing: 0.4,
-        height: 1.5,
-      );
 
   static TextTheme textTheme() => TextTheme(
         displaySmall: _textTheme.displaySmall?.copyWith(color: Colors.white),

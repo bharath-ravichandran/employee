@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:employee/models/employee_hive_model.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,16 +13,15 @@ class EmployeeCubit extends Cubit<EmployeeState> {
   late final List<Employee> list = [];
 
   //add employee cubit
-  addEmployee(String name, String designation, String from, String to) async {
+  addEmployee(Employee emp) async {
     emit(EmployeeLoading());
-    Random random = Random();
-    int randomNumber = random.nextInt(100);
+
     Employee newEmployee = Employee(
-      employeeId: randomNumber.toString(),
-      employeeName: name,
-      employeeDesignation: designation,
-      from: from,
-      to: to,
+      employeeId: emp.employeeId,
+      employeeName: emp.employeeName,
+      employeeDesignation: emp.employeeDesignation,
+      from: emp.from,
+      to: emp.to,
     );
 
     employee.add(newEmployee);

@@ -40,7 +40,7 @@ class EmployeeList extends StatelessWidget {
               const Center(child: CircularProgressIndicator());
             } else if (state is EditEmployeeState) {
               EditEmployee(
-                employeeId: state.employee.employeeId,
+                employee: state.employee,
               );
             } else if (state is EmployeeSuccess) {
               ListView(
@@ -69,8 +69,7 @@ class EmployeeList extends StatelessWidget {
                       child: InkWell(
                         onTap: () {
                           print(state.empl[index].employeeId);
-                          // employeeCubit.getEmployee(state.empl[index].employeeId);
-                          Nav.to(context, route: AppRoutes.editEmployee, arguments: state.empl[index].employeeId);
+                          Nav.to(context, route: AppRoutes.editEmployee, arguments: state.empl[index]);
                         },
                         child: ListTile(
                           title: Text(
@@ -101,7 +100,7 @@ class EmployeeList extends StatelessWidget {
               return const Center(child: CircularProgressIndicator());
             } else if (state is EditEmployeeState) {
               return EditEmployee(
-                employeeId: state.employee.employeeId,
+                employee: state.employee,
               );
             } else if (state is EmployeeSuccess) {
               return Column(
@@ -134,7 +133,7 @@ class EmployeeList extends StatelessWidget {
                               onTap: () {
                                 print(state.empl[index].employeeId);
                                 // employeeCubit.getEmployee(state.empl[index].employeeId);
-                                Nav.to(context, route: AppRoutes.editEmployee, arguments: state.empl[index].employeeId);
+                                Nav.to(context, route: AppRoutes.editEmployee, arguments: state.empl[index]);
                               },
                               child: ListTile(
                                 title: Text(
@@ -183,8 +182,8 @@ class EmployeeList extends StatelessWidget {
           ),
         ),
         onPressed: () {
-          // Nav.popAndPush(context, route: AppRoutes.addEmployee);
-          Nav.popAndPush(context, route: AppRoutes.sample);
+          Nav.popAndPush(context, route: AppRoutes.addEmployee);
+          // Nav.popAndPush(context, route: AppRoutes.sample);
         },
         child: const Icon(
           Icons.add,

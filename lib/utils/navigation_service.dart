@@ -12,17 +12,6 @@ class Nav {
     Navigator.of(context).popAndPushNamed(route, arguments: arguments);
   }
 
-  Nav.replace(this.context, {required String route, Object? arguments}) {
-    Navigator.of(context).pushReplacementNamed(route, arguments: arguments);
-  }
-
-  Nav.dialog(
-    this.context, {
-    required String route,
-  }) {
-    Navigator.of(context).pushNamed(route);
-  }
-
   Nav.snackBar(
     this.context, {
     required String message,
@@ -34,36 +23,6 @@ class Nav {
             message,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(color: AppColors.employeeWhite),
           )),
-    );
-  }
-
-  Nav.success(
-    this.context, {
-    required String message,
-  }) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        backgroundColor: AppColors.employeeSuccess,
-        content: Text(
-          message,
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(color: AppColors.employeeWhite),
-        ),
-      ),
-    );
-  }
-
-  Nav.warning(
-    this.context, {
-    required String message,
-  }) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        backgroundColor: AppColors.employeeWarning,
-        content: Text(
-          message,
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(color: AppColors.employeeWhite),
-        ),
-      ),
     );
   }
 

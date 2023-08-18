@@ -1,4 +1,9 @@
+import 'dart:math';
+
 import 'package:employee/bloc/cubit/employee_cubit.dart';
+import 'package:employee/models/employee_hive_model.dart';
+import 'package:employee/ui/__shared/custom_dialogs/show_calender.dart';
+import 'package:employee/ui/__shared/custom_widgets/calender_button.dart';
 import 'package:employee/ui/__shared/custom_widgets/custom_app_button_widget.dart';
 import 'package:employee/ui/__shared/custom_widgets/custom_dropdown_widget.dart';
 import 'package:employee/ui/__shared/custom_widgets/custom_input_texfield_widget.dart';
@@ -11,11 +16,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hive/hive.dart';
-
-import '../../ui/__shared/custom_widgets/calender_button.dart';
+import 'package:intl/intl.dart';
 
 class AddEmployee extends StatefulWidget {
-  AddEmployee({super.key});
+  const AddEmployee({super.key});
 
   @override
   State<AddEmployee> createState() => _AddEmployeeState();
@@ -30,11 +34,11 @@ class _AddEmployeeState extends State<AddEmployee> {
 
   late final Box box;
 
-  DateTime? fromDate, toDate;
+  String? fromDate, toDate;
+  var role;
 
   @override
   Widget build(BuildContext context) {
-    var role;
     return BlocProvider.value(
       value: employeeCubit,
       child: Scaffold(
@@ -74,7 +78,24 @@ class _AddEmployeeState extends State<AddEmployee> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Expanded(
-                          child: CalenderButton(fromDate: true),
+                          child: CalenderButton(
+                            fromDate: true,
+                            formattedDate: fromDate,
+                            callBack1: () async {
+                              var res = await showDialog(
+                                context: context,
+                                builder: (_) {
+                                  return const CalDialog(
+                                    fromDate: true,
+                                  );
+                                },
+                              );
+                              if (res != null) {
+                                fromDate = DateFormat('dd-MMM-yyyy').format(res);
+                                setState(() {});
+                              }
+                            },
+                          ),
                         ),
                         const Padding(
                           padding: EdgeInsets.symmetric(horizontal: 16),
@@ -84,7 +105,24 @@ class _AddEmployeeState extends State<AddEmployee> {
                           ),
                         ),
                         Expanded(
-                          child: CalenderButton(fromDate: false),
+                          child: CalenderButton(
+                            fromDate: false,
+                            formattedDate: toDate,
+                            callBack1: () async {
+                              var res = await showDialog(
+                                context: context,
+                                builder: (_) {
+                                  return const CalDialog(
+                                    fromDate: false,
+                                  );
+                                },
+                              );
+                              if (res != null) {
+                                toDate = DateFormat('dd-MMM-yyyy').format(res);
+                                setState(() {});
+                              }
+                            },
+                          ),
                         ),
                       ],
                     ),
@@ -100,18 +138,19 @@ class _AddEmployeeState extends State<AddEmployee> {
                         const SizedBox(width: 20),
                         CustomSaveButton(
                           onPressed: () async {
-                            if (role == null) {
+                            Random random = Random();
+                            int randomNumber = random.nextInt(100);
+                            if (role == null || fromDate == null || toDate == null) {
                               Nav.snackBar(context, message: 'Please select role of the employee');
                             } else {
                               if (_employeeFormKey.currentState!.validate()) {
-                                employeeCubit.addEmployee(
-                                  nameController.text,
-                                  role,
-                                  CalenderButton(
-                                    fromDate: false,
-                                  ).from.toString(),
-                                  CalenderButton(fromDate: true).to.toString(),
-                                );
+                                employeeCubit.addEmployee(Employee(
+                                  employeeName: nameController.text,
+                                  employeeDesignation: role,
+                                  from: fromDate!,
+                                  to: toDate!,
+                                  employeeId: randomNumber.toString(),
+                                ));
                                 Nav.popAndPush(context, route: AppRoutes.employeeList);
                               }
                             }
@@ -134,5 +173,33 @@ class _AddEmployeeState extends State<AddEmployee> {
       return 'Field can\'t be empty';
     }
     return null;
+  }
+}
+
+class CalDialog extends StatelessWidget {
+  final bool fromDate;
+  const CalDialog({super.key, required this.fromDate});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Material(
+            borderRadius: BorderRadius.circular(12),
+            color: AppColors.employeeWhite,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 12,
+              ),
+              child: CalendarWidget(fromDate: fromDate),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }

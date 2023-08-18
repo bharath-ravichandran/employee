@@ -13,19 +13,40 @@ import 'package:employee/utils/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 
-class EditEmployee extends StatelessWidget {
-  final String employeeId;
-  EditEmployee({super.key, required this.employeeId});
+import 'add_employee.dart';
 
+class EditEmployee extends StatefulWidget {
+  final Employee employee;
+  const EditEmployee({super.key, required this.employee});
+
+  @override
+  State<EditEmployee> createState() => _EditEmployeeState();
+}
+
+class _EditEmployeeState extends State<EditEmployee> {
   final EmployeeCubit employeeCubit = EmployeeCubit();
+
   final _employeeFormKey = GlobalKey<FormState>();
 
-  DateTime? fromDate, toDate;
+  String? fromDate, toDate;
+
+  var role;
+
+  final TextEditingController nameController = TextEditingController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    nameController.text = widget.employee.employeeName;
+    fromDate = widget.employee.from;
+    toDate = widget.employee.to;
+  }
 
   @override
   Widget build(BuildContext context) {
-    print('edit empl id from route : $employeeId');
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.employeeAppBar,
@@ -35,15 +56,11 @@ class EditEmployee extends StatelessWidget {
         ),
       ),
       body: BlocProvider.value(
-        value: employeeCubit..getEmployee(employeeId),
+        value: employeeCubit,
         child: BlocBuilder<EmployeeCubit, EmployeeState>(
-          bloc: employeeCubit..getEmployee(employeeId),
+          bloc: employeeCubit..getEmployee(widget.employee.employeeId),
           builder: (_, state) {
-            var role;
-            print('edit empl: $state');
             if (state is EditEmployeeState) {
-              print('after fetch : ${state.employee.employeeId}');
-              final TextEditingController nameController = TextEditingController(text: state.employee.employeeName);
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Form(
@@ -60,7 +77,6 @@ class EditEmployee extends StatelessWidget {
                       CustomDropDownWidget(
                         editVal: state.employee.employeeDesignation,
                         selectedValue: (String data) {
-                          print('calling on data : $data');
                           role = data;
                         },
                       ),
@@ -69,7 +85,24 @@ class EditEmployee extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Expanded(
-                            child: CalenderButton(fromDate: true),
+                            child: CalenderButton(
+                              fromDate: true,
+                              formattedDate: fromDate,
+                              callBack1: () async {
+                                var res = await showDialog(
+                                  context: context,
+                                  builder: (_) {
+                                    return const CalDialog(
+                                      fromDate: true,
+                                    );
+                                  },
+                                );
+                                if (res != null) {
+                                  fromDate = DateFormat('dd-MMM-yyyy').format(res);
+                                  setState(() {});
+                                }
+                              },
+                            ),
                           ),
                           const Padding(
                             padding: EdgeInsets.symmetric(horizontal: 16),
@@ -79,7 +112,24 @@ class EditEmployee extends StatelessWidget {
                             ),
                           ),
                           Expanded(
-                            child: CalenderButton(fromDate: false),
+                            child: CalenderButton(
+                              fromDate: false,
+                              formattedDate: toDate,
+                              callBack1: () async {
+                                var res = await showDialog(
+                                  context: context,
+                                  builder: (_) {
+                                    return const CalDialog(
+                                      fromDate: false,
+                                    );
+                                  },
+                                );
+                                if (res != null) {
+                                  toDate = DateFormat('dd-MMM-yyyy').format(res);
+                                  setState(() {});
+                                }
+                              },
+                            ),
                           ),
                         ],
                       ),
@@ -95,16 +145,16 @@ class EditEmployee extends StatelessWidget {
                           const SizedBox(width: 20),
                           CustomSaveButton(
                             onPressed: () async {
-                              if (role == null) {
+                              if (role == null || fromDate == null || toDate == null) {
                                 Nav.snackBar(context, message: 'Please select role of the employee');
                               } else {
                                 if (_employeeFormKey.currentState!.validate()) {
                                   employeeCubit.updateEmployee(Employee(
-                                    employeeId: employeeId,
+                                    employeeId: widget.employee.employeeId,
                                     employeeName: nameController.text,
                                     employeeDesignation: role,
-                                    from: '02-02-2000',
-                                    to: '02-02-2002',
+                                    from: fromDate!,
+                                    to: toDate!,
                                   ));
                                   Navigator.of(context).pop();
                                   Nav.popAndPush(context, route: AppRoutes.employeeList);

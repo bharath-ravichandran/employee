@@ -2,7 +2,6 @@ import 'package:employee/ui/employee_details/add_employee.dart';
 import 'package:employee/ui/employee_details/edit_employee.dart';
 import 'package:employee/ui/employee_details/employee_list.dart';
 import 'package:employee/ui/employee_details/error_page.dart';
-import 'package:employee/ui/employee_details/sample.dart';
 import 'package:flutter/material.dart';
 
 final GlobalKey<NavigatorState> rootNavKey = GlobalKey<NavigatorState>();
@@ -15,11 +14,6 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         builder: (_) => EmployeeList(),
       );
 
-    case AppRoutes.sample:
-      return MaterialPageRoute(
-        builder: (_) => Sample(),
-      );
-
     case AppRoutes.addEmployee:
       return MaterialPageRoute(
         builder: (_) => AddEmployee(),
@@ -28,7 +22,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case AppRoutes.editEmployee:
       return MaterialPageRoute(
         builder: (_) => EditEmployee(
-          employeeId: args,
+          employee: args,
         ),
       );
 
@@ -49,11 +43,9 @@ MaterialPageRoute _errorRoute(dynamic args, String? name) {
 }
 
 class AppRoutes {
-  //Authentication
   static const String onboarding = '/';
   static const String employeeList = '/employee_list';
   static const String addEmployee = '/add_employee';
-  static const String sample = '/sample';
   static const String editEmployee = '/edit_employee';
   static const String deleteEmployee = '/delete_employee';
 }
