@@ -16,7 +16,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
 
     case AppRoutes.addEmployee:
       return MaterialPageRoute(
-        builder: (_) => AddEmployee(),
+        builder: (_) => const AddEmployee(),
       );
 
     case AppRoutes.editEmployee:

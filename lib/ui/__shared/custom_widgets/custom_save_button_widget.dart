@@ -1,3 +1,5 @@
+import 'package:employee/utils/app_colors.dart';
+import 'package:employee/utils/app_theme.dart';
 import 'package:flutter/material.dart';
 
 class CustomSaveButton extends StatelessWidget {
@@ -19,9 +21,9 @@ class CustomSaveButton extends StatelessWidget {
       ),
       child: Text(
         'Save',
-        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              color: Colors.white,
-            ),
+        style: AppExTheme.titleSmall(context).copyWith(
+          color: AppColors.employeeWhite,
+        ),
       ),
     );
   }

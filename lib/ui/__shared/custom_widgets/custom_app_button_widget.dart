@@ -1,3 +1,4 @@
+import 'package:employee/utils/app_theme.dart';
 import 'package:flutter/material.dart';
 
 class AppButton extends StatelessWidget {
@@ -25,9 +26,9 @@ class AppButton extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              color: Colors.lightBlue,
-            ),
+        style: AppExTheme.titleSmall(context).copyWith(
+          color: Colors.lightBlue,
+        ),
       ),
     );
   }

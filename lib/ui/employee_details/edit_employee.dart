@@ -32,7 +32,7 @@ class _EditEmployeeState extends State<EditEmployee> {
 
   String? fromDate, toDate;
 
-  var role;
+  String? role;
 
   final TextEditingController nameController = TextEditingController();
 
@@ -152,7 +152,7 @@ class _EditEmployeeState extends State<EditEmployee> {
                                   employeeCubit.updateEmployee(Employee(
                                     employeeId: widget.employee.employeeId,
                                     employeeName: nameController.text,
-                                    employeeDesignation: role,
+                                    employeeDesignation: role!,
                                     from: fromDate!,
                                     to: toDate!,
                                   ));

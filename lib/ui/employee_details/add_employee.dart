@@ -11,6 +11,7 @@ import 'package:employee/ui/__shared/custom_widgets/custom_save_button_widget.da
 import 'package:employee/utils/app_assets.dart';
 import 'package:employee/utils/app_colors.dart';
 import 'package:employee/utils/app_routes.dart';
+import 'package:employee/utils/app_theme.dart';
 import 'package:employee/utils/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -35,7 +36,7 @@ class _AddEmployeeState extends State<AddEmployee> {
   late final Box box;
 
   String? fromDate, toDate;
-  var role;
+  String? role;
 
   @override
   Widget build(BuildContext context) {
@@ -45,9 +46,9 @@ class _AddEmployeeState extends State<AddEmployee> {
         appBar: AppBar(
           title: Text(
             'Add Employee Details',
-            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  color: Colors.white,
-                ),
+            style: AppExTheme.headlineSmall(context).copyWith(
+              color: AppColors.employeeWhite,
+            ),
           ),
           backgroundColor: Colors.lightBlue,
         ),
@@ -69,7 +70,6 @@ class _AddEmployeeState extends State<AddEmployee> {
                     const SizedBox(height: 20),
                     CustomDropDownWidget(
                       selectedValue: (String data) {
-                        print('calling on data : $data');
                         role = data;
                       },
                     ),
@@ -146,7 +146,7 @@ class _AddEmployeeState extends State<AddEmployee> {
                               if (_employeeFormKey.currentState!.validate()) {
                                 employeeCubit.addEmployee(Employee(
                                   employeeName: nameController.text,
-                                  employeeDesignation: role,
+                                  employeeDesignation: role!,
                                   from: fromDate!,
                                   to: toDate!,
                                   employeeId: randomNumber.toString(),

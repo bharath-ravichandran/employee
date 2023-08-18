@@ -31,7 +31,6 @@ class EmployeeList extends StatelessWidget {
         child: BlocConsumer<EmployeeCubit, EmployeeState>(
           bloc: employeeCubit..getAllEmployees(),
           listener: (_, state) {
-            print('object state : $state');
             if (state is EmployeeInitial) {
               Center(
                 child: Image.asset(AppImages.notFound),
@@ -59,7 +58,6 @@ class EmployeeList extends StatelessWidget {
                               size: 36,
                             ),
                             onPressed: () {
-                              print(state.empl[index].employeeId);
                               employeeCubit.deleteEmployee(state.empl[index].employeeId);
                               Nav.snackBar(context, message: 'Employee data has been deleted');
                             },
@@ -68,7 +66,6 @@ class EmployeeList extends StatelessWidget {
                       ],
                       child: InkWell(
                         onTap: () {
-                          print(state.empl[index].employeeId);
                           Nav.to(context, route: AppRoutes.editEmployee, arguments: state.empl[index]);
                         },
                         child: ListTile(
@@ -91,7 +88,6 @@ class EmployeeList extends StatelessWidget {
             }
           },
           builder: (_, state) {
-            print('object state : $state');
             if (state is EmployeeInitial) {
               return Center(
                 child: Image.asset(AppImages.notFound),
@@ -122,7 +118,6 @@ class EmployeeList extends StatelessWidget {
                                     size: 36,
                                   ),
                                   onPressed: () {
-                                    print(index.toString());
                                     employeeCubit.deleteEmployee(state.empl[index].employeeId);
                                     Nav.snackBar(context, message: 'Employee data has been deleted');
                                   },
@@ -131,7 +126,6 @@ class EmployeeList extends StatelessWidget {
                             ],
                             child: InkWell(
                               onTap: () {
-                                print(state.empl[index].employeeId);
                                 // employeeCubit.getEmployee(state.empl[index].employeeId);
                                 Nav.to(context, route: AppRoutes.editEmployee, arguments: state.empl[index]);
                               },
@@ -168,7 +162,7 @@ class EmployeeList extends StatelessWidget {
                 ],
               );
             } else if (state is EmployeeError) {
-              return ErrorPage(message: 'Something went wrong');
+              return const ErrorPage(message: 'Something went wrong');
             }
             return const SizedBox.shrink();
           },

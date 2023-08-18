@@ -231,7 +231,6 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                             shownDate.month,
                             indexDay + 1,
                           );
-                          print(selectedDate);
                           setState(() {});
                         },
                         child: Container(

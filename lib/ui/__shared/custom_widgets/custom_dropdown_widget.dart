@@ -1,5 +1,6 @@
 import 'package:employee/utils/app_assets.dart';
 import 'package:employee/utils/app_colors.dart';
+import 'package:employee/utils/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -12,8 +13,9 @@ class CustomDropDownWidget extends StatefulWidget {
     required this.selectedValue,
     this.editVal,
   });
+
   @override
-  _CustomDropDownWidgetState createState() => _CustomDropDownWidgetState();
+  State<CustomDropDownWidget> createState() => _CustomDropDownWidgetState();
 }
 
 class _CustomDropDownWidgetState extends State<CustomDropDownWidget> {
@@ -41,7 +43,7 @@ class _CustomDropDownWidgetState extends State<CustomDropDownWidget> {
                   alignment: Alignment.center,
                   child: ListView.separated(
                     itemCount: _items.length,
-                    separatorBuilder: (context, int) {
+                    separatorBuilder: (context, _) {
                       return const Divider();
                     },
                     itemBuilder: (context, index) {
@@ -49,9 +51,9 @@ class _CustomDropDownWidgetState extends State<CustomDropDownWidget> {
                         child: GestureDetector(
                           child: Text(
                             _items[index],
-                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                  color: AppColors.employeeTextBlack,
-                                ),
+                            style: AppExTheme.titleSmall(context).copyWith(
+                              color: AppColors.employeeTextBlack,
+                            ),
                           ),
                           onTap: () async {
                             setState(() {
@@ -67,7 +69,6 @@ class _CustomDropDownWidgetState extends State<CustomDropDownWidget> {
                 );
               },
             );
-            print('res val : $res');
             widget.selectedValue(res);
           },
           child: Container(
@@ -89,10 +90,8 @@ class _CustomDropDownWidgetState extends State<CustomDropDownWidget> {
                   visible: (widget.editVal != null),
                   replacement: Text(
                     _selected ?? 'Select Role',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyLarge
-                        ?.copyWith(color: _selected != null ? AppColors.employeeTextBlack : AppColors.employeeGrey),
+                    style: AppExTheme.titleSmall(context)
+                        .copyWith(color: _selected != null ? AppColors.employeeTextBlack : AppColors.employeeGrey),
                   ),
                   child: Text(
                     widget.editVal ?? 'Select Role',

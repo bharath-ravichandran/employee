@@ -1,4 +1,5 @@
 import 'package:employee/utils/app_colors.dart';
+import 'package:employee/utils/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -41,9 +42,9 @@ class CustomInputTextFieldWidget extends StatelessWidget {
       children: [
         TextFormField(
           initialValue: initialValue,
-          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: AppColors.employeeTextBlack,
-              ),
+          style: AppExTheme.titleSmall(context).copyWith(
+            color: AppColors.employeeTextBlack,
+          ),
           readOnly: readOnly,
           autofocus: true,
           autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -57,9 +58,9 @@ class CustomInputTextFieldWidget extends StatelessWidget {
           maxLines: maxLines,
           decoration: InputDecoration(
             hintText: hintLabel,
-            hintStyle: Theme.of(context).textTheme.bodyText1?.copyWith(
-                  color: AppColors.employeeTextBlack.withOpacity(0.5),
-                ),
+            hintStyle: AppExTheme.titleSmall(context).copyWith(
+              color: AppColors.employeeTextBlack.withOpacity(0.5),
+            ),
             filled: true,
             fillColor: AppColors.employeeWhite.withOpacity(0.1),
             contentPadding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
